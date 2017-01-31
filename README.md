@@ -16,19 +16,22 @@ switched to db academic
 
 ```
 
-####2. Membuat semua collection dan data dalam database.
+####2. Menampilkan semua collection dan data dalam database.
 
 #####input :
 ```
 
-code here
+show collections
+
 
 ```
 
 #####output :
 ```
 
-code here
+department
+students
+system.indexes
 
 ```
 
@@ -37,14 +40,14 @@ code here
 #####input :
 ```
 
-code here
+use academic
 
 ```
 
 #####output :
 ```
 
-code here
+switched to db academic
 
 ```
 
@@ -56,14 +59,14 @@ code here
 #####input :
 ```
 
-code here
+db.createCollection("Departments");
 
 ```
 
 #####output :
 ```
 
-WriteResult({ "nInserted" : 3 })
+ok: 1
 
 
 ```
@@ -74,32 +77,40 @@ WriteResult({ "nInserted" : 3 })
 #####input :
 ```
 
-code here
+db.createCollection("Students");
 
 ```
 
 #####output :
 ```
 
-code here
+ok: 1
 
 ```
 
 ####6. Melihat struktur collection ```student```.
 
 #####input :
-```code here```
+```
+var schema = db.students.findOne()
+
+```
 
 #####output :
-```code here```
+```
+_id
+nim
+name
+address
+department
+```
 
 ####7. Menginputkan 5 data ke dalam collection ```department```.
 
 #####input :
 ```
 
-db.department.insert(
-	[
+db.department.insert([
 	{
 		code: "FTI",
 		name: "Fakultas Teknologi Industri",
@@ -122,16 +133,32 @@ db.department.insert(
 		code: "FH",
 		name: "Fakultas Hukum",
 		major: [ {name: "Ilmu Hukum"} ]
+	},
+  {
+		code: "FSRD",
+		name: "Fakultas Seni Rupa Desain",
+		major: [
+				{name: "Desain Komunikasi Visual"},
+				{name: "Desain Interior"}
+				]
+	},
+  {
+		code: "FEB",
+		name: "Fakultas Ekonomi Bisnis",
+		major: [
+				{name: "Manajemen"},
+				{name: "Ekonomi Syariah"}
+				]
 	}
-	]
-)
+
+])
 
 ```
 
 #####output :
 ```
 
-code here
+WriteResult({ "nInserted" : 3 })
 
 ```
 
@@ -203,93 +230,201 @@ BulkWriteResult({
 #####input :
 ```
 
-code here
+db.students.find()
 
 ```
 
 #####output :
 ```
 
-code here
+{
+    "_id": ObjectId("58901db17cd7a31e0408651d"),
+    "nim": 1120110001,
+    "name": "John Doe",
+    "address": "Jalan Kemang I",
+    "department": DBRef("department", ObjectId("5890129c7cd7a31e0408651a"))
+} {
+    "_id": ObjectId("58901db17cd7a31e0408651e"),
+    "nim": 1220110005,
+    "name": "Jane Smith",
+    "address": "Jalan Palmerah I",
+    "department": DBRef("department", ObjectId("5890129c7cd7a31e0408651a"))
+} {
+    "_id": ObjectId("58901db17cd7a31e0408651f"),
+    "nim": 1320110003,
+    "name": "Marrie Queen",
+    "address": "Jalan Senayan I",
+    "department": DBRef("department", ObjectId("5890129c7cd7a31e0408651c"))
+}
 
 ```
 
-####10. Menampilkan key ```nama``` dan ```address``` dalam collection ```student```.
+####10. Menampilkan key `nama` dan `address` dalam collection `student`.
 
 #####input :
 ```
 
-code here
+db.students.find({},{name:1,address:1})
+
 
 ```
 
 #####output :
 ```
 
-code here
+{
+    "_id": ObjectId("58901db17cd7a31e0408651d"),
+    "name": "John Doe",
+    "address": "Jalan Kemang I"
+} {
+    "_id": ObjectId("58901db17cd7a31e0408651e"),
+    "name": "Jane Smith",
+    "address": "Jalan Palmerah I"
+} {
+    "_id": ObjectId("58901db17cd7a31e0408651f"),
+    "name": "Marrie Queen",
+    "address": "Jalan Senayan I"
+}
 
 ```
 
-####11. Menampilkan key ```studentId```, ```name```, dan ```address``` dari data student yang mempunyai ```studentId``` tertentu.
+####11. Menampilkan key `studentId`, `name`, dan `address` dari data student yang mempunyai `studentId` tertentu.
 
 #####input :
 ```
 
-code here
+db.students.find({nim: 1320110003},{nim:1, name:1,address:1})
 
 ```
 
 #####output :
 ```
 
-code here
+{
+    "_id": ObjectId("58901db17cd7a31e0408651f"),
+    "nim": 1320110003,
+    "name": "Marrie Queen",
+    "address": "Jalan Senayan I"
+}
 
 ```
 
-####12. Menampilkan semua data ```student``` secara urut berdasarkan ```name``` dengan ```sort```.
+####12. Menampilkan semua data `student` secara urut berdasarkan `name` dengan `sort`.
 
 #####input :
 ```
 
-code here
+db.students.find().sort({name:1})
 
 ```
 
 #####output :
 ```
 
-code here
+{
+    "_id": ObjectId("58901db17cd7a31e0408651e"),
+    "nim": 1220110005,
+    "name": "Jane Smith",
+    "address": "Jalan Palmerah I",
+    "department": DBRef("department", ObjectId("5890129c7cd7a31e0408651a"))
+} {
+    "_id": ObjectId("58901db17cd7a31e0408651d"),
+    "nim": 1120110001,
+    "name": "John Doe",
+    "address": "Jalan Kemang I",
+    "department": DBRef("department", ObjectId("5890129c7cd7a31e0408651a"))
+} {
+    "_id": ObjectId("58901db17cd7a31e0408651f"),
+    "nim": 1320110003,
+    "name": "Marrie Queen",
+    "address": "Jalan Senayan I",
+    "department": DBRef("department", ObjectId("5890129c7cd7a31e0408651c"))
+}
 
 ```
 
-####13. Menampilkan semua data ```department``` secara urut berdasarkan ```name``` secara ascending maupun descending.
+####13. Menampilkan semua data `department` secara urut berdasarkan `name` secara ascending maupun descending.
 
 #####input :
 ```
 
-code here
+db.departments.find().sort({name:1})
 
 ```
 
 #####output :
 ```
 
-code here
+{
+    "_id": ObjectId("589030ba7cd7a31e04086521"),
+    "code": "FEB",
+    "name": "Fakultas Ekonomi Bisnis",
+    "major": [{
+        "name": "Manajemen"
+    }, {
+        "name": "Ekonomi Syariah"
+    }]
+} {
+    "_id": ObjectId("589013a67cd7a31e0408651c"),
+    "code": "FH",
+    "name": "Fakultas Hukum",
+    "major": [{
+        "name": "Ilmu Hukum"
+    }]
+} {
+    "_id": ObjectId("589013357cd7a31e0408651b"),
+    "code": "FMIPA",
+    "name": "Fakultas Matematika dan Ilmu Pengetahuan Alam",
+    "major": [{
+        "name": "Matematika"
+    }, {
+        "name": "Fisika"
+    }, {
+        "name": "Biologi"
+    }]
+} {
+    "_id": ObjectId("589030477cd7a31e04086520"),
+    "code": "FSRD",
+    "name": "Fakultas Seni Rupa Desain",
+    "major": [{
+        "name": "Desain Komunikasi Visual"
+    }, {
+        "name": "Desain Interior"
+    }]
+} {
+    "_id": ObjectId("5890129c7cd7a31e0408651a"),
+    "code": "FTI",
+    "name": "Fakultas Teknologi Industri",
+    "major": [{
+        "name": "Teknik Mesin"
+    }, {
+        "name": "Teknik Elektro"
+    }, {
+        "name": "Teknik Kimia"
+    }]
+}
 
 ```
 
-####14. Mencari data ```student``` dengan ```name```
+####14. Mencari data `student` dengan `name`
 
 #####input :
 ```
 
-code here
+db.students.find({name: "Marrie Queen"})
 
 ```
 
 #####output :
 ```
 
-code here
+{
+    "_id": ObjectId("58901db17cd7a31e0408651f"),
+    "nim": 1320110003,
+    "name": "Marrie Queen",
+    "address": "Jalan Senayan I",
+    "department": DBRef("department", ObjectId("5890129c7cd7a31e0408651c"))
+}
+
 
 ```
